@@ -3,7 +3,10 @@ import data from "../sample_data.json";
 
 function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answerDisplayed, setAnswerDisplayed] = useState(false);
   // we need 2 state variables
+  const correctAnswer = data[currentQuestion].question.correct_choice_index;
+  console.log("This is the correct answer index:", correctAnswer);
   return (
     <div className="app">
       Trivia!
@@ -11,6 +14,7 @@ function App() {
         question={data[currentQuestion].question.text}
         num={currentQuestion}
       />
+      <CorrectAnswer />
       <NextQuestion NextQuestion="Next Question here" />
     </div>
   );
@@ -39,8 +43,24 @@ function Answer(props) {
   return (
     <div className="Answers">
       {props.answer.map((currentAnswer) => (
-        <div>{currentAnswer}</div>
+        <button>{currentAnswer}</button>
       ))}
+    </div>
+  );
+}
+
+function CorrectAnswer(props) {
+  return (
+    <div className="canswers">
+      {props.correctAnswer}
+      <button
+        onClick={() => {
+          return;
+        }}
+        className="RightAnswer"
+      >
+        Click for the Right Answer
+      </button>
     </div>
   );
 }
