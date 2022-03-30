@@ -5,8 +5,14 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answerDisplayed, setAnswerDisplayed] = useState(false);
   // we need 2 state variables
-  const correctAnswer = data[currentQuestion].question.correct_choice_index;
-  console.log("This is the correct answer index:", correctAnswer);
+  const correctAnswerIndex =
+    data[currentQuestion].question.correct_choice_index;
+
+  function revealCorrectAnswer() {
+    // Now we know user clicked right answer button
+    setAnswerDisplayed(true);
+  }
+
   return (
     <div className="app">
       Trivia!
@@ -14,7 +20,15 @@ function App() {
         question={data[currentQuestion].question.text}
         num={currentQuestion}
       />
-      <CorrectAnswer />
+      <CorrectAnswer answer={revealCorrectAnswer} />
+      {answerDisplayed ? (
+        <div>
+          Correct Answer:{" "}
+          {data[currentQuestion].question.choices[correctAnswerIndex]}
+        </div>
+      ) : (
+        ""
+      )}
       <NextQuestion NextQuestion="Next Question here" />
     </div>
   );
@@ -41,9 +55,9 @@ function Question(props) {
 }
 function Answer(props) {
   return (
-    <div className="Answers">
+    <div className="container">
       {props.answer.map((currentAnswer) => (
-        <button>{currentAnswer}</button>
+        <button className="button">{currentAnswer}</button>
       ))}
     </div>
   );
@@ -55,7 +69,7 @@ function CorrectAnswer(props) {
       {props.correctAnswer}
       <button
         onClick={() => {
-          return;
+          props.answer();
         }}
         className="RightAnswer"
       >
@@ -64,7 +78,14 @@ function CorrectAnswer(props) {
     </div>
   );
 }
-
+function Bingo() {
+  if (Answer() === CorrectAnswer()) {
+    console.log("you got the right answer!");
+  } else {
+    console.log("oops better luck next time!");
+  }
+  return;
+}
 function NextQuestion(props) {
   return <button className="NextQuestions">{props.NextQuestion}</button>;
 }
